@@ -1,5 +1,4 @@
-import mongoose, { Mongoose } from "mongoose";
-import { string, trim } from "zod";
+import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema(
   {
