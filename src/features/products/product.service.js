@@ -23,3 +23,9 @@ export const updateProductByIdService = async (id, data) => {
 
   return product;
 };
+
+export const deleteProductByIdService = async (id) => {
+  const product = await Product.findByIdAndDelete(id);
+
+  return product;
+};

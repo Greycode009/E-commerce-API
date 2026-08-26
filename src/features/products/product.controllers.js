@@ -1,6 +1,7 @@
 import AppError from "../../utils/AppError.js";
 import {
   createProductService,
+  deleteProductByIdService,
   getProductByIdService,
   getProductsService,
   updateProductByIdService,
@@ -38,7 +39,7 @@ export const getProductById = async (req, res) => {
   });
 };
 
-export const updateProductById = async (req, res) => {
+export const updateProduct = async (req, res) => {
   const product = await updateProductByIdService(req.params.id, req.body.id);
 
   if (!product) {
@@ -47,6 +48,20 @@ export const updateProductById = async (req, res) => {
   return res.status(200).json({
     success: true,
     message: "Product updated successfully.",
+    data: product,
+  });
+};
+
+export const deleteProduct = async (req, res) => {
+  const product = await deleteProductByIdService(req.params.id);
+
+  if (!product) {
+    throw new AppError("Product not found", 404);
+  }
+
+  return res.status(200).json({
+    success: true,
+    message: "Product deleted successfully.",
     data: product,
   });
 };
