@@ -1,4 +1,9 @@
-import { createProductService, getProductsService } from "./product.service.js";
+import AppError from "../../utils/AppError.js";
+import {
+  createProductService,
+  getProductByIdService,
+  getProductsService,
+} from "./product.service.js";
 
 export const createProduct = async (req, res) => {
   try {
@@ -35,4 +40,17 @@ export const getProducts = async (req, res) => {
       message: "Failed to get products.",
     });
   }
+};
+
+export const getProductById = async (req, res) => {
+  const product = await getProductByIdService(req.params.id);
+
+  if (!product) {
+    throw new AppError("Product not found.", 404);
+  }
+  return res.status(200).json({
+    success: true,
+    message: "Product fetched successfully.",
+    data: product,
+  });
 };

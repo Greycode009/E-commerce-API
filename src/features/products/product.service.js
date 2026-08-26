@@ -11,3 +11,11 @@ export const getProductsService = async () => {
 
   return product;
 };
+
+export const getProductByIdService = async (id) => {
+  const product = await Product.findById(id);
+
+  return product;
+};
+
+
