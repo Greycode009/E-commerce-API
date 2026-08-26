@@ -46,5 +46,15 @@ const cartSchema = new mongoose.Schema({
         required: true,
         min: 0,
         default: 0,
+    },
+    couponCode: {
+        type: String,
+        trim: true,
     }
+}, {
+    timestamps: true
 });
+
+const Cart = mongoose.model("Cart", cartSchema);
+
+export default Cart;
