@@ -5,3 +5,9 @@ export const createProductService = async (data) => {
 
   return product;
 };
+
+export const getProductsService = async () => {
+  const product = await Product.find();
+
+  return product;
+};

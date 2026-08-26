@@ -1,4 +1,4 @@
-import { createProductService } from "./product.service.js";
+import { createProductService, getProductsService } from "./product.service.js";
 
 export const createProduct = async (req, res) => {
   try {
@@ -14,6 +14,25 @@ export const createProduct = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to create product",
+    });
+  }
+};
+
+export const getProducts = async (req, res) => {
+  try {
+    const products = await getProductsService();
+
+    res.status(200).json({
+      success: true,
+      message: "Products fetched successfully.",
+      data: products,
+    });
+  } catch (error) {
+    console.error("Get products error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Failed to get products.",
     });
   }
 };
