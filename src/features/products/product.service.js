@@ -18,4 +18,8 @@ export const getProductByIdService = async (id) => {
   return product;
 };
 
+export const updateProductByIdService = async (id, data) => {
+  const product = await Product.findByIdAndUpdate(id, data, { new: true });
 
+  return product;
+};
