@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { loginUser, registerUser, resendOtp, verifyOtp } from "./user.controllers.js";
+import { loginUser, refreshAccessToken, registerUser, resendOtp, verifyOtp } from "./user.controllers.js";
 import { loginUserValidation, registerUserValidation, resendOtpValidation, verifyOtpValidation } from "./user.validation.js";
 import validate from "../../middleware/validate.js";
 
@@ -21,6 +21,10 @@ userRouter.post(
     resendOtp,
 );
 userRouter.post("/login", validate(loginUserValidation), loginUser);
+userRouter.post(
+    "/refresh-token",
+    refreshAccessToken,
+);
 
 
 export default userRouter;

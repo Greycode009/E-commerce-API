@@ -8,6 +8,8 @@ import { sendEmail } from "../../utils/sendEmail.js";
 import { getOtpHtml } from "../../utils/getOtpHtml.js";
 import { generateAccessToken, generateRefreshToken } from "../../utils/token.js";
 import Session from "./session.model.js";
+import jwt from "jsonwebtoken";
+
 
 export const registerUserService = async (data) => {
     const existingUser = await User.findOne({ email: data.email });
@@ -163,4 +165,39 @@ export const loginUserService = async (data) => {
         refreshToken,
     };
 
+};
+
+export const refreshAccessTokenService = async (refreshToken) => {
+    if (!refreshToken) {
+        throw new AppError("Refresh token is required.", 401);
+    }
+
+    const session = await Session.findOne({ refreshToken });
+
+    if (!session) {
+        throw new AppError("Invalid refresh token.", 401);
+    }
+
+    try {
+        const decoded = jwt.verify(
+            refreshToken,
+            process.env.JWT_SECRET,
+        );
+
+        const user = await User.findById(decoded.id);
+
+        if (!user) {
+            throw new AppError("User not found.", 404);
+        }
+
+        const accessToken = generateAccessToken(user);
+
+        return accessToken;
+    } catch (error) {
+        if (error instanceof AppError) {
+            throw error;
+        }
+
+        throw new AppError("Invalid or expired refresh token.", 401);
+    }
 };

@@ -3,6 +3,7 @@ import {
     verifyOtpService,
     resendOtpService,
     loginUserService,
+    refreshAccessTokenService,
 } from "./user.service.js";
 
 export const registerUser = async (req, res) => {
@@ -54,3 +55,18 @@ export const loginUser = async (req, res) => {
         }
     })
 }
+
+export const refreshAccessToken = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+    console.log("Refresh token:", refreshToken);
+
+    const accessToken = await refreshAccessTokenService(refreshToken);
+
+    return res.status(200).json({
+        success: true,
+        message: "Access token refreshed successfully.",
+        data: {
+            accessToken,
+        },
+    });
+};
