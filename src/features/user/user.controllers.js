@@ -2,6 +2,7 @@ import {
     registerUserService,
     verifyOtpService,
     resendOtpService,
+    loginUserService,
 } from "./user.service.js";
 
 export const registerUser = async (req, res) => {
@@ -25,10 +26,24 @@ export const verifyOtp = async (req, res) => {
 }
 
 export const resendOtp = async (req, res) => {
-  await resendOtpService(req.body.email);
+    await resendOtpService(req.body.email);
 
-  return res.status(200).json({
-    success: true,
-    message: "OTP sent successfully.",
-  });
+    return res.status(200).json({
+        success: true,
+        message: "OTP sent successfully.",
+    });
 };
+
+//Login Controller
+
+export const loginUser = async (req, res) => {
+    const { user, accessToken, refreshToken } = await loginUserService(req.body);
+
+    return res.status(200).json({
+        success: true,
+        message: "Login successfully.",
+        data: {
+            user, accessToken, refreshToken
+        }
+    })
+}

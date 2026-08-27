@@ -6,6 +6,7 @@ import crypto from "crypto";
 import OTP from "./otp.model.js";
 import { sendEmail } from "../../utils/sendEmail.js";
 import { getOtpHtml } from "../../utils/getOtpHtml.js";
+import { generateAccessToken, generateRefreshToken } from "../../utils/token.js";
 
 export const registerUserService = async (data) => {
     const existingUser = await User.findOne({ email: data.email });
@@ -119,4 +120,40 @@ export const resendOtpService = async (email) => {
         `Your verification code is ${otp}. It expires in 10 minutes.`,
         getOtpHtml(otp),
     );
+};
+
+export const loginUserService = async (data) => {
+    const user = await User.findOne({
+        email: data.email,
+    }).select("+password");
+
+    if (!user) {
+        throw new AppError("Invalid email or password.", 401);
+    }
+
+    if (!user.verified) {
+        throw new AppError("Please verify your account first.", 403);
+    }
+
+    const isPasswordValid = await argon2.verify(
+        user.password,
+        data.password,
+    );
+
+    if (!isPasswordValid) {
+        throw new AppError("Invalid email or password.", 401);
+    }
+
+    const accessToken = generateAccessToken(user);
+    const refreshToken = generateRefreshToken(user);
+
+
+    user.password = undefined;
+
+    return {
+        user,
+        accessToken,
+        refreshToken,
+    };
+
 };

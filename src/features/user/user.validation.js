@@ -6,6 +6,11 @@ export const registerUserValidation = z.object({
     password: z.string().min(6),
 });
 
+export const loginUserValidation = z.object({
+  email: z.string().email(),
+  password: z.string().min(6),
+});
+
 export const verifyOtpValidation = z.object({
     email: z.string().email(),
     otp: z.string().length(6),
