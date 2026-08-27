@@ -4,6 +4,8 @@ import {
     resendOtpService,
     loginUserService,
     refreshAccessTokenService,
+    logoutAllDevicesService,
+    logoutUserService,
 } from "./user.service.js";
 
 export const registerUser = async (req, res) => {
@@ -68,5 +70,31 @@ export const refreshAccessToken = async (req, res) => {
         data: {
             accessToken,
         },
+    });
+};
+
+//Logout
+
+export const logoutUser = async (req, res) => {
+    const refreshToken = req.cookies.refreshToken;
+
+    await logoutUserService(refreshToken);
+
+    res.clearCookie("refreshToken");
+
+    return res.status(200).json({
+        success: true,
+        message: "Logout successful.",
+    });
+};
+
+export const logoutAllDevices = async (req, res) => {
+    await logoutAllDevicesService(req.user.id);
+
+    res.clearCookie("refreshToken");
+
+    return res.status(200).json({
+        success: true,
+        message: "Logged out from all devices successfully.",
     });
 };

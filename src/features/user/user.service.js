@@ -201,3 +201,14 @@ export const refreshAccessTokenService = async (refreshToken) => {
         throw new AppError("Invalid or expired refresh token.", 401);
     }
 };
+
+export const logoutUserService = async (refreshToken) => {
+    if (!refreshToken) {
+        throw new AppError("Refresh token is required.", 401);
+    }
+
+    await Session.deleteOne({ refreshToken });
+};
+export const logoutAllDevicesService = async (userId) => {
+    await Session.deleteMany({ userId });
+};

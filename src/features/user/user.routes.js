@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { loginUser, refreshAccessToken, registerUser, resendOtp, verifyOtp } from "./user.controllers.js";
+import { loginUser, logoutAllDevices, logoutUser, refreshAccessToken, registerUser, resendOtp, verifyOtp } from "./user.controllers.js";
 import { loginUserValidation, registerUserValidation, resendOtpValidation, verifyOtpValidation } from "./user.validation.js";
 import validate from "../../middleware/validate.js";
+import { authenticate } from "../../middleware/authenticate.js";
 
 const userRouter = Router();
 
@@ -25,6 +26,8 @@ userRouter.post(
     "/refresh-token",
     refreshAccessToken,
 );
+userRouter.post("/logout", logoutUser);
+userRouter.post("/logout-all", authenticate, logoutAllDevices);
 
 
 export default userRouter;
