@@ -3,6 +3,7 @@ import { loginUser, logoutAllDevices, logoutUser, refreshAccessToken, registerUs
 import { loginUserValidation, registerUserValidation, resendOtpValidation, verifyOtpValidation } from "./user.validation.js";
 import validate from "../../middleware/validate.js";
 import { authenticate } from "../../middleware/authenticate.js";
+import { authorize } from "../../middleware/authorize.js";
 
 const userRouter = Router();
 
