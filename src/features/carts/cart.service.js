@@ -14,7 +14,7 @@ export const addCartItemService = async (consumerId, data) => {
         throw new AppError("Product not found", 404);
     }
     if (data.quantity > product.stock) {
-        throw new AppError("Insuffient stock.", 400);
+        throw new AppError("Insufficient stock.", 400);
     }
 
     let cart = await Cart.findOne({ consumerId })
@@ -33,7 +33,7 @@ export const addCartItemService = async (consumerId, data) => {
         const newQuantity = existingItem.quantity + data.quantity;
 
         if (newQuantity > product.stock) {
-            throw new AppError("Insuffient stock", 400);
+            throw new AppError("Insufficient stock", 400);
         }
         existingItem.quantity = newQuantity;
     }
