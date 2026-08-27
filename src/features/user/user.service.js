@@ -1,39 +1,122 @@
 import AppError from "../../utils/AppError.js";
 import { generateOtp } from "../../utils/generateOtp.js";
-import User from "./user.model.js"
+import User from "./user.model.js";
 import argon2 from "argon2";
 import crypto from "crypto";
-import OTP from "./otp.model.js"
+import OTP from "./otp.model.js";
+import { sendEmail } from "../../utils/sendEmail.js";
+import { getOtpHtml } from "../../utils/getOtpHtml.js";
 
 export const registerUserService = async (data) => {
     const existingUser = await User.findOne({ email: data.email });
 
     if (existingUser) {
-        throw new AppError("Email already registered.", 409)
+        throw new AppError("Email already registered.", 409);
     }
 
     const hashedPassword = await argon2.hash(data.password, {
-        type: argon2.argon2d,
-    })
+        type: argon2.argon2id,
+    });
 
     const user = await User.create({
         name: data.name,
         email: data.email,
         password: hashedPassword,
-    })
+    });
 
     const otp = generateOtp();
 
-    const hashedOtp = crypto.createHash("sha256").update(otp).digest('hex');
+    const hashedOtp = crypto
+        .createHash("sha256")
+        .update(otp)
+        .digest("hex");
 
     await OTP.create({
         email: data.email,
         otp: hashedOtp,
         expiresAt: new Date(Date.now() + 10 * 60 * 1000),
     });
+    await sendEmail(
+        data.email,
+        "Verify Your E-Commerce Account",
+        `Your verification code is ${otp}. It expires in 10 minutes.`,
+        getOtpHtml(otp),
+    );
 
     return {
-        user, otp,
+        user
     };
+};
 
+export const verifyOtpService = async (data) => {
+    const user = await User.findOne({ email: data.email });
+
+    if (!user) {
+        throw new AppError("User not found.", 404);
+    }
+
+    if (user.verified) {
+        throw new AppError("User is already verified.", 400);
+    }
+
+    const otpRecord = await OTP.findOne({
+        email: data.email,
+    });
+
+    if (!otpRecord) {
+        throw new AppError("OTP expired or not found.", 400);
+    }
+
+    const hashedOtp = crypto
+        .createHash("sha256")
+        .update(data.otp)
+        .digest("hex");
+
+    if (hashedOtp !== otpRecord.otp) {
+        throw new AppError("Invalid OTP.", 400);
+    }
+
+    user.verified = true;
+
+    await user.save();
+
+    await OTP.deleteOne({
+        _id: otpRecord._id,
+    });
+
+    return user;
+};
+
+export const resendOtpService = async (email) => {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+        throw new AppError("User not found.", 404);
+    }
+
+    if (user.verified) {
+        throw new AppError("User is already verified.", 400);
+    }
+
+    await OTP.deleteMany({ email });
+
+    const otp = generateOtp();
+
+    const hashedOtp = crypto
+        .createHash("sha256")
+        .update(otp)
+        .digest("hex");
+
+    await OTP.create({
+        email,
+        otp: hashedOtp,
+        expiresAt: new Date(Date.now() + 10 * 60 * 1000),
+    });
+
+    await sendEmail(
+        email,
+        "Your New Verification Code",
+        `Your verification code is ${otp}. It expires in 10 minutes.`,
+        getOtpHtml(otp),
+    );
 };
