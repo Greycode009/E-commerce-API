@@ -60,7 +60,6 @@ export const loginUser = async (req, res) => {
 
 export const refreshAccessToken = async (req, res) => {
     const refreshToken = req.cookies.refreshToken;
-    console.log("Refresh token:", refreshToken);
 
     const accessToken = await refreshAccessTokenService(refreshToken);
 
