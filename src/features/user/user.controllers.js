@@ -39,11 +39,18 @@ export const resendOtp = async (req, res) => {
 export const loginUser = async (req, res) => {
     const { user, accessToken, refreshToken } = await loginUserService(req.body);
 
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+    });
+
     return res.status(200).json({
         success: true,
         message: "Login successfully.",
         data: {
-            user, accessToken, refreshToken
+            user, accessToken,
         }
     })
 }

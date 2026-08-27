@@ -7,6 +7,7 @@ import OTP from "./otp.model.js";
 import { sendEmail } from "../../utils/sendEmail.js";
 import { getOtpHtml } from "../../utils/getOtpHtml.js";
 import { generateAccessToken, generateRefreshToken } from "../../utils/token.js";
+import Session from "./session.model.js";
 
 export const registerUserService = async (data) => {
     const existingUser = await User.findOne({ email: data.email });
@@ -146,6 +147,12 @@ export const loginUserService = async (data) => {
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
+
+    await Session.create({
+        userId: user._id,
+        refreshToken,
+        expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    });
 
 
     user.password = undefined;
