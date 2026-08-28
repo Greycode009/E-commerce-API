@@ -24,6 +24,7 @@ const userSchema = new mongoose.Schema(
             enum: ["consumer", "merchant", "admin"],
             default: "consumer",
         },
+
         verified: {
             type: Boolean,
             default: false,
