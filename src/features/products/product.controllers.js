@@ -8,7 +8,7 @@ import {
 } from "./product.service.js";
 
 export const createProduct = async (req, res) => {
-  const product = await createProductService(req.body);
+  const product = await createProductService(req.user.id, req.body);
 
   return res.status(201).json({
     success: true,
@@ -40,7 +40,11 @@ export const getProductById = async (req, res) => {
 };
 
 export const updateProduct = async (req, res) => {
-  const product = await updateProductByIdService(req.params.id, req.body.id);
+  const product = await updateProductByIdService(
+    req.params.id,
+    req.user.id,
+    req.body
+  );
 
   if (!product) {
     throw new AppError("Product not found", 404);
@@ -53,7 +57,7 @@ export const updateProduct = async (req, res) => {
 };
 
 export const deleteProduct = async (req, res) => {
-  const product = await deleteProductByIdService(req.params.id);
+  const product = await deleteProductByIdService(req.params.id, req.user.id);
 
   if (!product) {
     throw new AppError("Product not found", 404);

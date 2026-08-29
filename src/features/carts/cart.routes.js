@@ -11,7 +11,7 @@ cartRouter.post(
   "/items",
   authenticate,
   validate(addCartItemValidation),
-  addCartItem,
+  addCartItem
 );
 
 export default cartRouter;

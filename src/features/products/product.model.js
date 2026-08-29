@@ -35,7 +35,7 @@ const productSchema = new mongoose.Schema(
 
     merchant: {
       type: mongoose.Schema.Types.ObjectId,
-      // ref: "user",
+      ref: "User",
       required: false,
     },
     imageUrl: {
@@ -45,7 +45,7 @@ const productSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  },
+  }
 );
 
 const Product = mongoose.model("Product", productSchema);

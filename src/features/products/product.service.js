@@ -1,7 +1,10 @@
 import Product from "./product.model.js";
 
-export const createProductService = async (data) => {
-  const product = await Product.create(data);
+export const createProductService = async (merchantId, data) => {
+  const product = await Product.create({
+    ...data,
+    merchant: merchantId,
+  });
 
   return product;
 };
@@ -18,14 +21,25 @@ export const getProductByIdService = async (id) => {
   return product;
 };
 
-export const updateProductByIdService = async (id, data) => {
-  const product = await Product.findByIdAndUpdate(id, data, { new: true });
+export const updateProductByIdService = async (id, merchantId, data) => {
+    const product = await Product.findOneAndUpdate(
+        {
+            _id: id,
+            merchant: merchantId,
+        },
+        data,
+        { new: true }
+    );
 
-  return product;
+    return product;
 };
 
-export const deleteProductByIdService = async (id) => {
-  const product = await Product.findByIdAndDelete(id);
+export const deleteProductByIdService = async (id, merchantId) => {
+  const product = await Product.findByIdAndDelete(
+    {
+    _id: id,
+    merchant: merchantId,
+  });
 
   return product;
 };
