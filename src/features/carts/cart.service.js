@@ -30,7 +30,7 @@ export const addCartItemService = async (consumerId, data) => {
     });
   }
   const existingItem = cart.items.find(
-    (item) => item.productId.toString() === data.productId,
+    (item) => item.productId.toString() === data.productId
   );
 
   if (existingItem) {
@@ -52,7 +52,7 @@ export const addCartItemService = async (consumerId, data) => {
   }
   cart.subtotal = cart.items.reduce(
     (total, item) => total + item.price * item.quantity,
-    0,
+    0
   );
   await cart.save();
   return cart;

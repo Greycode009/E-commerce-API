@@ -1,21 +1,24 @@
 import mongoose from "mongoose";
 
-const sessionSchema = new mongoose.Schema(
+const merchantSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      unique: true,
     },
 
-    refreshToken: {
+    businessName: {
       type: String,
       required: true,
+      trim: true,
     },
 
-    expiresAt: {
-      type: Date,
+    businessDescription: {
+      type: String,
       required: true,
+      trim: true,
     },
   },
   {
@@ -23,6 +26,6 @@ const sessionSchema = new mongoose.Schema(
   }
 );
 
-const Session = mongoose.model("Session", sessionSchema);
+const Merchant = mongoose.model("Merchant", merchantSchema);
 
-export default Session;
+export default Merchant;
