@@ -22,21 +22,20 @@ export const getProductByIdService = async (id) => {
 };
 
 export const updateProductByIdService = async (id, merchantId, data) => {
-    const product = await Product.findOneAndUpdate(
-        {
-            _id: id,
-            merchant: merchantId,
-        },
-        data,
-        { new: true }
-    );
+  const product = await Product.findOneAndUpdate(
+    {
+      _id: id,
+      merchant: merchantId,
+    },
+    data,
+    { new: true }
+  );
 
-    return product;
+  return product;
 };
 
 export const deleteProductByIdService = async (id, merchantId) => {
-  const product = await Product.findByIdAndDelete(
-    {
+  const product = await Product.findByIdAndDelete({
     _id: id,
     merchant: merchantId,
   });
