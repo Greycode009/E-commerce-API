@@ -29,7 +29,7 @@ export const registerUserService = async (data) => {
   });
 
   await sendOtp(data.email);
-   user.password = undefined;
+  user.password = undefined;
 
   return {
     user,
