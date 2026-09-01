@@ -7,6 +7,7 @@ import userRouter from "./features/user/user.routes.js";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import merchantRouter from "./features/merchant/merchant.routes.js";
+import orderRouter from "./features/orders/order.routes.js";
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/products", productRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/users", userRouter);
 app.use("/api/merchant", merchantRouter);
+app.use("/api/orders", orderRouter);
 
 app.use(errorMiddleware);
 
