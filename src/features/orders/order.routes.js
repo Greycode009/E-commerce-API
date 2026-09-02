@@ -1,18 +1,27 @@
 import { Router } from "express";
-import { createOrder } from "./order.controllers.js";
-import {authenticate} from "../../middleware/authenticate.js";
-import {authorize} from "../../middleware/authorize.js";
-
+import {
+  cancelOrder,
+  createOrder,
+  getMerchantOrders,
+  getMyOrders,
+  getOrderById,
+  updateOrderStatus,
+} from "./order.controllers.js";
+import { authenticate } from "../../middleware/authenticate.js";
+import { authorize } from "../../middleware/authorize.js";
 
 const orderRouter = Router();
 
-
-
-orderRouter.post(
-  "/",
+orderRouter.post("/", authenticate, authorize("consumer"), createOrder);
+orderRouter.get("/my-orders", authenticate, authorize("consumer"), getMyOrders);
+orderRouter.get(
+  "/merchant",
   authenticate,
-  authorize("consumer"),
-  createOrder
+  authorize("merchant"),
+  getMerchantOrders
 );
+orderRouter.get("/:orderId", authenticate, authorize("consumer"), getOrderById);
+orderRouter.patch("/:orderId/status", authenticate, authorize("merchant"), updateOrderStatus);
+orderRouter.patch("/:orderId/cancel", authenticate, authorize("consumer"), cancelOrder);
 
 export default orderRouter;
