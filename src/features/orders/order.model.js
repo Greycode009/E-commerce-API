@@ -7,6 +7,11 @@ const orderItemSchema = new mongoose.Schema(
       ref: "Product",
       required: true,
     },
+    merchantId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
     title: {
       type: String,
       required: true,

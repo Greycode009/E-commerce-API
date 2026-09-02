@@ -10,6 +10,9 @@ import {
 import Session from "./session.model.js";
 import jwt from "jsonwebtoken";
 import { sendOtp } from "../../utils/sendOtp.js";
+import { generateOtp } from "../../utils/generateOtp.js";
+import { sendEmail } from "../../utils/sendEmail.js";
+import { getOtpHtml } from "../../utils/getOtpHtml.js";
 
 export const registerUserService = async (data) => {
   const existingUser = await User.findOne({ email: data.email });
