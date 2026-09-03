@@ -49,10 +49,12 @@ export const updatePaymentStatusService = async (userId, paymentId, status) => {
   await payment.save();
 
   if (status === "paid") {
-  await Order.findByIdAndUpdate(payment.orderId, {
-    status: "confirmed",
-  });
-}
+    payment.transactionId = `TXN-${Date.now()}`;
+
+    await Order.findByIdAndUpdate(payment.orderId, {
+      status: "confirmed",
+    });
+  }
 
   return payment;
 };
