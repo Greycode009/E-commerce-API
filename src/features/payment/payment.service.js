@@ -29,3 +29,30 @@ export const createPaymentService = async (userId, orderId, method) => {
   });
   return payment;
 };
+
+export const updatePaymentStatusService = async (userId, paymentId, status) => {
+  const payment = await Payment.findById(paymentId);
+  if (!payment) {
+    throw new AppError("Payment not found", 404);
+  }
+  if (payment.userId.toString() !== userId.toString()) {
+    throw new AppError("Access denied.", 403);
+  }
+  if (payment.status === "paid") {
+    throw new AppError("Payment is already completed.", 400);
+  }
+  if (!["paid", "failed"].includes(status)) {
+    throw new AppError("Invalid payment status.", 400);
+  }
+  payment.status = status;
+
+  await payment.save();
+
+  if (status === "paid") {
+  await Order.findByIdAndUpdate(payment.orderId, {
+    status: "confirmed",
+  });
+}
+
+  return payment;
+};

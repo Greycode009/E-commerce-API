@@ -1,4 +1,4 @@
-import { createPaymentService } from "./payment.service.js";
+import { createPaymentService, updatePaymentStatusService } from "./payment.service.js";
 
 export const createPayment = async (req, res) => {
   const payment = await createPaymentService(
@@ -10,6 +10,20 @@ export const createPayment = async (req, res) => {
   return res.status(201).json({
     success: true,
     message: "Payment created successfully",
+    data: payment,
+  });
+};
+
+export const updatePaymentStatus = async (req, res) => {
+  const payment = await updatePaymentStatusService(
+    req.user.id,
+    req.params.paymentId,
+    req.body.status
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "Payment status updated successfully.",
     data: payment,
   });
 };
