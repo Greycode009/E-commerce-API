@@ -1,6 +1,10 @@
 import { Router } from "express";
 import { getAllUsersService } from "./admin.service.js";
-import { getAllMerchants, getAllUsers } from "./admin.controllers.js";
+import {
+  getAllMerchants,
+  getAllOrders,
+  getAllUsers,
+} from "./admin.controllers.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
 
@@ -9,8 +13,9 @@ adminRouter.get("/users", authenticate, authorize("admin"), getAllUsers);
 adminRouter.get(
   "/merchants",
   authenticate,
-  authorize("admin"),
+  authorize("/admin"),
   getAllMerchants
 );
+adminRouter.get("/orders", authenticate, authorize("admin"), getAllOrders);
 
 export default adminRouter;
