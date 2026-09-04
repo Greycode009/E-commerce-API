@@ -1,3 +1,4 @@
+import AppError from "../../utils/appError.js";
 import Merchant from "../merchant/merchant.model.js";
 import Order from "../orders/order.model.js";
 import User from "../user/user.model.js";
@@ -23,6 +24,19 @@ export const getAllMerchantsService = async () => {
     "name email role verified"
   );
   return merchants;
+};
+
+export const getMerchantByIdService = async (merchantId) => {
+  const merchant = await Merchant.findById(merchantId).populate(
+    "userId",
+    "name email role verified"
+  );
+
+  if (!merchant) {
+    throw new AppError("Merchant not found.", 404);
+  }
+
+  return merchant;
 };
 
 export const getAllOrdersService = async () => {

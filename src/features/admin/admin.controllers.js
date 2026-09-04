@@ -2,6 +2,7 @@ import {
   getAllMerchantsService,
   getAllOrdersService,
   getAllUsersService,
+  getMerchantByIdService,
   getUserByIdService,
 } from "./admin.service.js";
 
@@ -14,6 +15,17 @@ export const getAllUsers = async (req, res) => {
     data: users,
   });
 };
+
+export const getUserById = async (req, res) => {
+  const user = await getUserByIdService(req.params.userId);
+
+  return res.status(200).json({
+    success: true,
+    message: "User fetched successfully.",
+    data: user,
+  });
+};
+
 export const getAllMerchants = async (req, res) => {
   const merchants = await getAllMerchantsService();
 
@@ -23,6 +35,17 @@ export const getAllMerchants = async (req, res) => {
     data: merchants,
   });
 };
+
+export const getMerchantById = async (req, res) => {
+  const merchant = await getMerchantByIdService(req.params.merchantId);
+
+  return res.status(200).json({
+    success: true,
+    message: "Merchant fetched successfully.",
+    data: merchant,
+  });
+};
+
 export const getAllOrders = async (req, res) => {
   const orders = await getAllOrdersService();
 
@@ -30,15 +53,5 @@ export const getAllOrders = async (req, res) => {
     success: true,
     message: "All orders fetched successfully.",
     data: orders,
-  });
-};
-
-export const getUserById = async (req, res) => {
-  const user = await getUserByIdService(req.params.userId);
-
-  return res.status(200).json({
-    success: true,
-    message: "User fetched successfully.",
-    data: user,
   });
 };

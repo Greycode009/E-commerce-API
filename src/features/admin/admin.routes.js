@@ -5,6 +5,7 @@ import {
   getAllOrders,
   getAllUsers,
   getUserById,
+  getMerchantById,
 } from "./admin.controllers.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
@@ -18,6 +19,17 @@ adminRouter.get(
   getAllMerchants
 );
 adminRouter.get("/orders", authenticate, authorize("admin"), getAllOrders);
-adminRouter.get("/users/:userId", authenticate, authorize("admin"), getUserById);
+adminRouter.get(
+  "/users/:userId",
+  authenticate,
+  authorize("admin"),
+  getUserById
+);
+adminRouter.get(
+  "/merchants/:merchantId",
+  authenticate,
+  authorize("admin"),
+  getMerchantById
+);
 
 export default adminRouter;
