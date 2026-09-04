@@ -6,6 +6,7 @@ import {
   getMerchantByIdService,
   getOrderByIdService,
   getUserByIdService,
+  updateUserStatusService,
 } from "./admin.service.js";
 
 export const getAllUsers = async (req, res) => {
@@ -74,6 +75,19 @@ export const deleteUser = async (req, res) => {
   return res.status(200).json({
     success: true,
     message: "User deleted successfully.",
+    data: user,
+  });
+};
+
+export const updateUserStatus = async (req, res) => {
+  const user = await updateUserStatusService(
+    req.params.userId,
+    req.body.isActive
+  );
+
+  return res.status(200).json({
+    success: true,
+    message: "User status updated successfully.",
     data: user,
   });
 };

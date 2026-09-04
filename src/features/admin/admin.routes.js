@@ -8,6 +8,7 @@ import {
   getMerchantById,
   getOrderById,
   deleteUser,
+  updateUserStatus,
 } from "./admin.controllers.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
@@ -44,6 +45,12 @@ adminRouter.delete(
   authenticate,
   authorize("admin"),
   deleteUser
+);
+adminRouter.patch(
+  "/users/:userId/status",
+  authenticate,
+  authorize("admin"),
+  updateUserStatus
 );
 
 export default adminRouter;

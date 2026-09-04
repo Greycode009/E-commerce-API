@@ -119,6 +119,10 @@ export const loginUserService = async (data) => {
     throw new AppError("Please verify your account first.", 403);
   }
 
+  if (!user.isActive) {
+    throw new AppError("Your account has been deactivated.", 403);
+  }
+
   const isPasswordValid = await argon2.verify(user.password, data.password);
 
   if (!isPasswordValid) {

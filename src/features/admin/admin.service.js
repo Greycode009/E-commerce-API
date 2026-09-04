@@ -61,3 +61,17 @@ export const deleteUserService = async (userId) => {
   }
   return user;
 };
+
+export const updateUserStatusService = async (userId, isActive) => {
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { isActive },
+    { new: true }
+  );
+
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+
+  return user;
+};
