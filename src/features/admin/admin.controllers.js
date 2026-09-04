@@ -3,6 +3,7 @@ import {
   getAllOrdersService,
   getAllUsersService,
   getMerchantByIdService,
+  getOrderByIdService,
   getUserByIdService,
 } from "./admin.service.js";
 
@@ -53,5 +54,15 @@ export const getAllOrders = async (req, res) => {
     success: true,
     message: "All orders fetched successfully.",
     data: orders,
+  });
+};
+
+export const getOrderById = async (req, res) => {
+  const order = await getOrderByIdService(req.params.orderId);
+
+  return res.status(200).json({
+    success: true,
+    message: "Order fetched successfully.",
+    data: order,
   });
 };

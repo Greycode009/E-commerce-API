@@ -43,3 +43,12 @@ export const getAllOrdersService = async () => {
   const orders = await Order.find().sort({ createdAt: -1 });
   return orders;
 };
+
+export const getOrderByIdService = async (orderId) => {
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    throw new AppError("Order not found", 404);
+  }
+  return order;
+};

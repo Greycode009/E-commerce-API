@@ -6,6 +6,7 @@ import {
   getAllUsers,
   getUserById,
   getMerchantById,
+  getOrderById,
 } from "./admin.controllers.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
@@ -30,6 +31,12 @@ adminRouter.get(
   authenticate,
   authorize("admin"),
   getMerchantById
+);
+adminRouter.get(
+  "/orders/:orderId",
+  authenticate,
+  authorize("admin"),
+  getOrderById
 );
 
 export default adminRouter;
