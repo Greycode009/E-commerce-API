@@ -52,3 +52,12 @@ export const getOrderByIdService = async (orderId) => {
   }
   return order;
 };
+
+export const deleteUserService = async (userId) => {
+  const user = await User.findByIdAndDelete(userId);
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+  return user;
+};

@@ -1,4 +1,5 @@
 import {
+  deleteUserService,
   getAllMerchantsService,
   getAllOrdersService,
   getAllUsersService,
@@ -64,5 +65,15 @@ export const getOrderById = async (req, res) => {
     success: true,
     message: "Order fetched successfully.",
     data: order,
+  });
+};
+
+export const deleteUser = async (req, res) => {
+  const user = await deleteUserService(req.params.userId);
+
+  return res.status(200).json({
+    success: true,
+    message: "User deleted successfully.",
+    data: user,
   });
 };

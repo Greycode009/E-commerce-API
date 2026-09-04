@@ -7,6 +7,7 @@ import {
   getUserById,
   getMerchantById,
   getOrderById,
+  deleteUser,
 } from "./admin.controllers.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
@@ -37,6 +38,12 @@ adminRouter.get(
   authenticate,
   authorize("admin"),
   getOrderById
+);
+adminRouter.delete(
+  "/users/:userId",
+  authenticate,
+  authorize("admin"),
+  deleteUser
 );
 
 export default adminRouter;
