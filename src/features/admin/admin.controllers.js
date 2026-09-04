@@ -2,6 +2,7 @@ import {
   getAllMerchantsService,
   getAllOrdersService,
   getAllUsersService,
+  getUserByIdService,
 } from "./admin.service.js";
 
 export const getAllUsers = async (req, res) => {
@@ -29,5 +30,15 @@ export const getAllOrders = async (req, res) => {
     success: true,
     message: "All orders fetched successfully.",
     data: orders,
+  });
+};
+
+export const getUserById = async (req, res) => {
+  const user = await getUserByIdService(req.params.userId);
+
+  return res.status(200).json({
+    success: true,
+    message: "User fetched successfully.",
+    data: user,
   });
 };

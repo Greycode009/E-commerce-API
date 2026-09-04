@@ -7,12 +7,25 @@ export const getAllUsersService = async () => {
   return users;
 };
 
+export const getUserByIdService = async (userId) => {
+  const user = await User.findById(userId).select("-password");
+
+  if (!user) {
+    throw new AppError("User not found.", 404);
+  }
+
+  return user;
+};
+
 export const getAllMerchantsService = async () => {
-  const merchants = await Merchant.find().populate("userId","name email role verified");
+  const merchants = await Merchant.find().populate(
+    "userId",
+    "name email role verified"
+  );
   return merchants;
 };
 
 export const getAllOrdersService = async () => {
-    const orders = await Order.find().sort({ createdAt: -1 });
-    return orders;
+  const orders = await Order.find().sort({ createdAt: -1 });
+  return orders;
 };
