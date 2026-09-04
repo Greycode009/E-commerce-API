@@ -9,6 +9,7 @@ import morgan from "morgan";
 import merchantRouter from "./features/merchant/merchant.routes.js";
 import orderRouter from "./features/orders/order.routes.js";
 import paymentRouter from "./features/payment/payment.routes.js";
+import adminRouter from "./features/admin/admin.routes.js";
 
 const app = express();
 
@@ -22,6 +23,7 @@ app.use("/api/users", userRouter);
 app.use("/api/merchant", merchantRouter);
 app.use("/api/orders", orderRouter);
 app.use("/api/payments", paymentRouter);
+app.use("/api/admin", adminRouter);
 
 app.use(errorMiddleware);
 
