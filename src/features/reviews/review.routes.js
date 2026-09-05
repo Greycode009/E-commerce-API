@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReview, updateReview } from "./review.controllers.js";
+import { createReview, deleteReview, updateReview } from "./review.controllers.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
 import Validate from "../../middleware/validate.js";
@@ -14,6 +14,12 @@ reviewRouter.patch(
   authorize("consumer"),
   Validate(updateReviewSchema),
   updateReview
+);
+reviewRouter.delete(
+  "/:reviewId",
+  authenticate,
+  authorize("consumer"),
+  deleteReview
 );
 
 export default reviewRouter;

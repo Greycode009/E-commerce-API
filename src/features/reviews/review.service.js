@@ -60,3 +60,16 @@ export const updateReviewService = async (userId, reviewId, data) => {
 
   return review;
 };
+
+export const deleteReviewService = async (userId, reviewId) => {
+  const review = await Review.findOneAndDelete({
+    _id: reviewId,
+    userId,
+  });
+
+  if (!review) {
+    throw new AppError("Review not found.", 404);
+  }
+
+  return review;
+};
