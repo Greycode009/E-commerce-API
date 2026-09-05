@@ -1,4 +1,9 @@
-import { createReviewService, deleteReviewService, updateReviewService } from "./review.service.js";
+import {
+  createReviewService,
+  deleteReviewService,
+  getProductReviewsService,
+  updateReviewService,
+} from "./review.service.js";
 
 export const createReview = async (req, res) => {
   const review = await createReviewService(req.user.id, req.body);
@@ -32,3 +37,12 @@ export const deleteReview = async (req, res) => {
   });
 };
 
+export const getProductReviews = async (req, res) => {
+  const reviews = await getProductReviewsService(req.params.productId);
+
+  return res.status(200).json({
+    success: true,
+    message: "Product reviews fetched successfully.",
+    data: reviews,
+  });
+};

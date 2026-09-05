@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReview, deleteReview, updateReview } from "./review.controllers.js";
+import { createReview, deleteReview, getProductReviews, updateReview } from "./review.controllers.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
 import Validate from "../../middleware/validate.js";
@@ -20,6 +20,10 @@ reviewRouter.delete(
   authenticate,
   authorize("consumer"),
   deleteReview
+);
+reviewRouter.get(
+  "/product/:productId",
+  getProductReviews
 );
 
 export default reviewRouter;

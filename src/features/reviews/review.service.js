@@ -73,3 +73,16 @@ export const deleteReviewService = async (userId, reviewId) => {
 
   return review;
 };
+
+export const getProductReviewsService = async (productId) => {
+  const product = await Product.findById(productId);
+
+  if (!product) {
+    throw new AppError("Product not found.", 404);
+  }
+
+  return await Review.find({ productId })
+    .populate("userId", "name")
+    .sort({ createdAt: -1 });
+};
+
