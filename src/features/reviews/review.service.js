@@ -22,6 +22,14 @@ export const createReviewService = async (userId, data) => {
   if (!order) {
     throw new AppError("You can only review products you purchased.", 403);
   }
+  const existingReview = await Review.findOne({
+    userId,
+    productId: data.productId,
+  });
+
+  if (existingReview) {
+    throw new AppError("You have already reviewed this product.", 400);
+  }
   const review = await Review.create({
     userId: user._id,
     productId: product._id,
