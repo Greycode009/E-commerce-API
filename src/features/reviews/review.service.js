@@ -38,3 +38,25 @@ export const createReviewService = async (userId, data) => {
   });
   return review;
 };
+
+export const updateReviewService = async (userId, reviewId, data) => {
+  const review = await Review.findOneAndUpdate(
+    {
+      _id: reviewId,
+      userId,
+    },
+    {
+      $set: data,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  if (!review) {
+    throw new AppError("Review not found.", 404);
+  }
+
+  return review;
+};
