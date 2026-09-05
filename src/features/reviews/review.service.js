@@ -1,8 +1,8 @@
-import AppError from "../../utils/appError";
-import Order from "../orders/order.model";
-import Product from "../products/product.model";
-import User from "../user/user.model";
-import Review from "./review.model";
+import AppError from "../../utils/AppError.js";
+import Order from "../orders/order.model.js";
+import Product from "../products/product.model.js";
+import User from "../user/user.model.js";
+import Review from "./review.model.js";
 
 export const createReviewService = async (userId, data) => {
   const user = await User.findById(userId);
