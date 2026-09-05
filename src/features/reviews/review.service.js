@@ -86,3 +86,30 @@ export const getProductReviewsService = async (productId) => {
     .sort({ createdAt: -1 });
 };
 
+export const getProductRatingService = async (productId) => {
+  const product = await Product.findById(productId);
+
+  if (!product) {
+    throw new AppError("Product not found.", 404);
+  }
+
+  const result = await Review.aggregate([
+    {
+      $match: {
+        productId: product._id,
+      },
+    },
+    {
+      $group: {
+        _id: "$productId",
+        averageRating: { $avg: "$rating" },
+        totalReviews: { $sum: 1 },
+      },
+    },
+  ]);
+
+  return {
+    averageRating: result[0]?.averageRating || 0,
+    totalReviews: result[0]?.totalReviews || 0,
+  };
+};

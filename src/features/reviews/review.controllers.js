@@ -1,6 +1,7 @@
 import {
   createReviewService,
   deleteReviewService,
+  getProductRatingService,
   getProductReviewsService,
   updateReviewService,
 } from "./review.service.js";
@@ -46,3 +47,14 @@ export const getProductReviews = async (req, res) => {
     data: reviews,
   });
 };
+
+export const getProductRating = async (req, res) => {
+  const rating = await getProductRatingService(req.params.productId);
+
+  return res.status(200).json({
+    success: true,
+    message: "Product rating fetched successfully.",
+    data: rating,
+  });
+};
+
