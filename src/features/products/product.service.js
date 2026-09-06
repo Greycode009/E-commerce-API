@@ -15,7 +15,8 @@ export const getProductsService = async (
   minPrice,
   maxPrice,
   page = 1,
-  limit = 10
+  limit = 10,
+  sort
 ) => {
   const filter = {};
 
@@ -40,11 +41,26 @@ export const getProductsService = async (
       $lte: Number(maxPrice),
     };
   }
+  //sort
+  let sortOption = {};
+
+  if (sort === "price_asc") {
+    sortOption.price = 1;
+  } else if (sort === "price_desc") {
+    sortOption.price = -1;
+  } else if (sort === "newest") {
+    sortOption.createdAt = -1;
+  } else if (sort === "oldest") {
+    sortOption.createdAt = 1;
+  }
 
   // Pagination
   const skip = (page - 1) * limit;
 
-  const products = await Product.find(filter).skip(skip).limit(limit);
+  const products = await Product.find(filter)
+    .sort(sortOption)
+    .skip(skip)
+    .limit(limit);
 
   const totalProducts = await Product.countDocuments(filter);
 

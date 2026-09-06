@@ -24,6 +24,7 @@ export const getProducts = async (req, res) => {
     maxPrice,
     page = 1,
     limit = 10,
+    sort,
   } = req.query;
   const result = await getProductsService(
     search,
@@ -31,7 +32,8 @@ export const getProducts = async (req, res) => {
     minPrice,
     maxPrice,
     Number(page),
-    Number(limit)
+    Number(limit),
+    sort
   );
 
   res.status(200).json({
