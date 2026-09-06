@@ -17,3 +17,13 @@ export const updateProductValidation = z.object({
   category: z.string().min(1),
   imageUrl: z.string().url().optional(),
 });
+
+export const productQueryValidation = z.object({
+  search: z.string().optional(),
+  category: z.string().optional(),
+  minPrice: z.coerce.number().min(0).optional(),
+  maxPrice: z.coerce.number().min(0).optional(),
+  page: z.coerce.number().int().positive().default(1),
+  limit: z.coerce.number().int().positive().default(10),
+  sort: z.enum(["price_asc", "price_desc", "newest", "oldest"]).optional(),
+});
