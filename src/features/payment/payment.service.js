@@ -1,6 +1,6 @@
 import Payment from "./payment.model.js";
 import Order from "../orders/order.model.js";
-import AppError from "../../utils/appError.js";
+import AppError from "../../utils/AppError.js";
 import { paymentSchema } from "./payment.validation.js";
 
 export const createPaymentService = async (userId, orderId, method) => {
