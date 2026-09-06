@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server.js",
     "dev": "npx nodemon server.js",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
