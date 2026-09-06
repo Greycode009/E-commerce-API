@@ -17,7 +17,7 @@ export const createProduct = async (req, res) => {
 };
 
 export const getProducts = async (req, res) => {
-  const products = await getProductsService();
+  const products = await getProductsService(req.query.search);
 
   res.status(200).json({
     success: true,

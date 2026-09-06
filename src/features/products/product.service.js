@@ -9,10 +9,16 @@ export const createProductService = async (merchantId, data) => {
   return product;
 };
 
-export const getProductsService = async () => {
-  const product = await Product.find();
+export const getProductsService = async (search) => {
+  const filter = {};
 
-  return product;
+  if (search) {
+    filter.title = { $regex: search, $options: "i" };
+  }
+
+  const products = await Product.find(filter);
+
+  return products;
 };
 
 export const getProductByIdService = async (id) => {
