@@ -9,6 +9,7 @@ import {
 } from "./product.controllers.js";
 import {
   createProductValidation,
+  productQueryValidation,
   updateProductValidation,
 } from "./product.validation.js";
 import validate from "../../middleware/validate.js";
@@ -24,7 +25,7 @@ productRouter.post(
   validate(createProductValidation),
   createProduct
 );
-productRouter.get("/", getProducts);
+productRouter.get("/", validate(productQueryValidation, "query"), getProducts);
 productRouter.get("/:id", getProductById);
 productRouter.put(
   "/:id",

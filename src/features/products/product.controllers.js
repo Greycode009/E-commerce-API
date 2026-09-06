@@ -17,12 +17,29 @@ export const createProduct = async (req, res) => {
 };
 
 export const getProducts = async (req, res) => {
-  const products = await getProductsService();
+  const {
+    search,
+    category,
+    minPrice,
+    maxPrice,
+    page = 1,
+    limit = 10,
+    sort,
+  } = req.query;
+  const result = await getProductsService(
+    search,
+    category,
+    minPrice,
+    maxPrice,
+    Number(page),
+    Number(limit),
+    sort
+  );
 
   res.status(200).json({
     success: true,
     message: "Products fetched successfully.",
-    data: products,
+    data: result,
   });
 };
 

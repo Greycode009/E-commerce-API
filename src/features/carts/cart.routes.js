@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { addCartItem, clearCart, getCart, removeCartItem, updateCartItem } from "./cart.controllers.js";
+import {
+  addCartItem,
+  clearCart,
+  getCart,
+  removeCartItem,
+  updateCartItem,
+} from "./cart.controllers.js";
 import validate from "../../middleware/validate.js";
 import {
   addCartItemValidation,
@@ -31,12 +37,6 @@ cartRouter.delete(
   authorize("consumer"),
   removeCartItem
 );
-cartRouter.delete(
-  "/",
-  authenticate,
-  authorize("consumer"),
-  clearCart
-);
-
+cartRouter.delete("/", authenticate, authorize("consumer"), clearCart);
 
 export default cartRouter;

@@ -27,6 +27,13 @@ app.use("/api/payments", paymentRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/reviews", reviewRouter);
 
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "E-commerce API is running.",
+  });
+});
+
 app.use(errorMiddleware);
 
 export default app;

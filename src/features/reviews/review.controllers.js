@@ -57,4 +57,3 @@ export const getProductRating = async (req, res) => {
     data: rating,
   });
 };
-

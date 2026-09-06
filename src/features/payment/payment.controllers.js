@@ -1,4 +1,7 @@
-import { createPaymentService, updatePaymentStatusService } from "./payment.service.js";
+import {
+  createPaymentService,
+  updatePaymentStatusService,
+} from "./payment.service.js";
 
 export const createPayment = async (req, res) => {
   const payment = await createPaymentService(
