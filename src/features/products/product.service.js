@@ -9,12 +9,31 @@ export const createProductService = async (merchantId, data) => {
   return product;
 };
 
-export const getProductsService = async (search) => {
+export const getProductsService = async (search, category, minPrice, maxPrice) => {
   const filter = {};
 
   if (search) {
     filter.title = { $regex: search, $options: "i" };
   }
+
+  if (category) {
+    filter.category = category;
+  }
+
+   if (minPrice !== undefined) {
+    filter.price = {
+      ...filter.price,
+      $gte: Number(minPrice),
+    };
+  }
+
+  if (maxPrice !== undefined) {
+    filter.price = {
+      ...filter.price,
+      $lte: Number(maxPrice),
+    };
+  }
+
 
   const products = await Product.find(filter);
 
