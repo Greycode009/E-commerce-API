@@ -1,4 +1,4 @@
-import AppError from "../../utils/appError.js";
+import AppError from "../../utils/AppError.js";
 import Merchant from "../merchant/merchant.model.js";
 import Order from "../orders/order.model.js";
 import User from "../user/user.model.js";
