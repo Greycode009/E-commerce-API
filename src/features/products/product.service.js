@@ -9,7 +9,14 @@ export const createProductService = async (merchantId, data) => {
   return product;
 };
 
-export const getProductsService = async (search, category, minPrice, maxPrice) => {
+export const getProductsService = async (
+  search,
+  category,
+  minPrice,
+  maxPrice,
+  page = 1,
+  limit = 10
+) => {
   const filter = {};
 
   if (search) {
@@ -20,7 +27,7 @@ export const getProductsService = async (search, category, minPrice, maxPrice) =
     filter.category = category;
   }
 
-   if (minPrice !== undefined) {
+  if (minPrice !== undefined) {
     filter.price = {
       ...filter.price,
       $gte: Number(minPrice),
@@ -34,10 +41,24 @@ export const getProductsService = async (search, category, minPrice, maxPrice) =
     };
   }
 
+  // Pagination
+  const skip = (page - 1) * limit;
 
-  const products = await Product.find(filter);
+  const products = await Product.find(filter).skip(skip).limit(limit);
 
-  return products;
+  const totalProducts = await Product.countDocuments(filter);
+
+  const totalPages = Math.ceil(totalProducts / limit);
+
+  return {
+    products,
+    pagination: {
+      currentPage: page,
+      totalPages,
+      totalProducts,
+      limit,
+    },
+  };
 };
 
 export const getProductByIdService = async (id) => {
