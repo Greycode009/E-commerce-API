@@ -21,7 +21,17 @@ orderRouter.get(
   getMerchantOrders
 );
 orderRouter.get("/:orderId", authenticate, authorize("consumer"), getOrderById);
-orderRouter.patch("/:orderId/status", authenticate, authorize("merchant"), updateOrderStatus);
-orderRouter.patch("/:orderId/cancel", authenticate, authorize("consumer"), cancelOrder);
+orderRouter.patch(
+  "/:orderId/status",
+  authenticate,
+  authorize("merchant"),
+  updateOrderStatus
+);
+orderRouter.patch(
+  "/:orderId/cancel",
+  authenticate,
+  authorize("consumer"),
+  cancelOrder
+);
 
 export default orderRouter;

@@ -94,7 +94,6 @@ export const updateCartItemService = async (userId, productId, quantity) => {
 };
 
 export const removeCartItemService = async (userId, productId) => {
-
   const cart = await Cart.findOne({ userId });
 
   if (!cart) {

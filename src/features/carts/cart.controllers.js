@@ -41,17 +41,14 @@ export const updateCartItem = async (req, res) => {
 };
 
 export const removeCartItem = async (req, res) => {
-  const cart = await removeCartItemService(
-    req.user.id,
-    req.params.productId
-  );
+  const cart = await removeCartItemService(req.user.id, req.params.productId);
 
   return res.status(200).json({
     success: true,
     message: "Cart item removed successfully.",
     data: cart,
   });
-}
+};
 
 export const clearCart = async (req, res) => {
   const cart = await clearCartService(req.user.id);
