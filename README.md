@@ -333,7 +333,7 @@ Example:
 ```json
 {
   "email": "admin@example.com",
-  "password": "YOUR_ADMIN_PASSWORD"
+  "password": "Admin@123"
 }
 ```
 
