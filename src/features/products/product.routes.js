@@ -25,7 +25,7 @@ productRouter.post(
   validate(createProductValidation),
   createProduct
 );
-productRouter.get("/", validate(productQueryValidation), getProducts);
+productRouter.get("/", validate(productQueryValidation, "query"), getProducts);
 productRouter.get("/:id", getProductById);
 productRouter.put(
   "/:id",
