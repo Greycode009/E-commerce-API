@@ -1,5 +1,6 @@
 import express from "express";
-
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
 import productRouter from "./features/products/product.routes.js";
 import errorMiddleware from "./middleware/error.middleware.js";
 import cartRouter from "./features/carts/cart.routes.js";
@@ -13,6 +14,10 @@ import adminRouter from "./features/admin/admin.routes.js";
 import reviewRouter from "./features/reviews/review.routes.js";
 
 const app = express();
+
+const swaggerDocument = YAML.load("./swagger.yaml");
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use(express.json());
 app.use(morgan("dev"));

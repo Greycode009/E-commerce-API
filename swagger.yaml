@@ -1,0 +1,210 @@
+openapi: 3.0.0
+info:
+  title: E-Commerce API
+  version: 1.0.0
+  description: API documentation for the E-Commerce API
+
+servers:
+  - url: http://localhost:3000
+
+paths:
+  /health:
+    get:
+      summary: Check API health
+      responses:
+        "200":
+          description: API is running successfully
+
+  /api/products:
+    get:
+      summary: Get all products
+      description: Get products with search, filtering, sorting, and pagination.
+      parameters:
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Search products by title
+
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Filter products by category
+
+        - in: query
+          name: minPrice
+          schema:
+            type: number
+            minimum: 0
+          description: Minimum product price
+
+        - in: query
+          name: maxPrice
+          schema:
+            type: number
+            minimum: 0
+          description: Maximum product price
+
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number
+
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+          description: Number of products per page
+
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum:
+              - price_asc
+              - price_desc
+              - newest
+              - oldest
+          description: Sort products
+
+      responses:
+        "200":
+          description: Products fetched successfully
+
+    post:
+      summary: Create a new product
+      description: Create a product as an authenticated merchant.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - title
+                - description
+                - price
+                - stock
+                - category
+              properties:
+                title:
+                  type: string
+                  example: iPhone 15
+                description:
+                  type: string
+                  example: Latest Apple smartphone
+                price:
+                  type: number
+                  example: 999
+                stock:
+                  type: integer
+                  example: 10
+                category:
+                  type: string
+                  example: electronics
+                imageUrl:
+                  type: string
+                  format: uri
+                  example: https://example.com/iphone.jpg
+      responses:
+        "201":
+          description: Product created successfully
+        "401":
+          description: Authentication required
+        "403":
+          description: Access denied
+
+  /api/products/{id}:
+    get:
+      summary: Get product by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product ID
+      responses:
+        "200":
+          description: Product fetched successfully
+        "404":
+          description: Product not found
+
+    patch:
+      summary: Update product
+      description: Update a product as the merchant who owns it.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                stock:
+                  type: integer
+                category:
+                  type: string
+                imageUrl:
+                  type: string
+                  format: uri
+      responses:
+        "200":
+          description: Product updated successfully
+        "401":
+          description: Authentication required
+        "403":
+          description: Access denied
+        "404":
+          description: Product not found
+
+    delete:
+      summary: Delete product
+      description: Delete a product as the merchant who owns it.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Product ID
+      responses:
+        "200":
+          description: Product deleted successfully
+        "401":
+          description: Authentication required
+        "403":
+          description: Access denied
+        "404":
+          description: Product not found
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
