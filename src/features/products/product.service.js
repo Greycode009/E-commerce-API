@@ -1,3 +1,5 @@
+import redisClient from "../../config/redis.js";
+import { createProductCacheKey } from "./product.cache.js";
 import Product from "./product.model.js";
 
 export const createProductService = async (merchantId, data) => {
@@ -16,8 +18,25 @@ export const getProductsService = async (
   maxPrice,
   page = 1,
   limit = 10,
-  sort
+  sort,
 ) => {
+  const cacheKey = createProductCacheKey({
+    search,
+    category,
+    minPrice,
+    maxPrice,
+    page,
+    limit,
+    sort,
+  });
+
+  const cachedProducts = await redisClient.get(cacheKey);
+  if (cachedProducts) {
+    console.log("CACHE HIT");
+    return JSON.parse(cachedProducts);
+  }
+  console.log("CACHE MISS");
+
   const filter = {};
 
   if (search) {
@@ -66,7 +85,7 @@ export const getProductsService = async (
 
   const totalPages = Math.ceil(totalProducts / limit);
 
-  return {
+  const result = {
     products,
     pagination: {
       currentPage: page,
@@ -75,6 +94,11 @@ export const getProductsService = async (
       limit,
     },
   };
+  await redisClient.set(cacheKey, JSON.stringify(result), {
+    EX: 60,
+  });
+
+  return result;
 };
 
 export const getProductByIdService = async (id) => {
@@ -90,7 +114,7 @@ export const updateProductByIdService = async (id, merchantId, data) => {
       merchant: merchantId,
     },
     data,
-    { new: true }
+    { new: true },
   );
 
   return product;
