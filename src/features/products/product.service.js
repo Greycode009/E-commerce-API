@@ -1,5 +1,8 @@
 import redisClient from "../../config/redis.js";
-import { createProductCacheKey } from "./product.cache.js";
+import {
+  createProductCacheKey,
+  invalidateProductCache,
+} from "./product.cache.js";
 import Product from "./product.model.js";
 
 export const createProductService = async (merchantId, data) => {
@@ -117,6 +120,10 @@ export const updateProductByIdService = async (id, merchantId, data) => {
     { new: true },
   );
 
+  if (product) {
+    await invalidateProductCache(redisClient);
+  }
+
   return product;
 };
 
@@ -125,6 +132,10 @@ export const deleteProductByIdService = async (id, merchantId) => {
     _id: id,
     merchant: merchantId,
   });
+
+  if (product) {
+    await invalidateProductCache(redisClient);
+  }
 
   return product;
 };
