@@ -15,15 +15,18 @@ import {
 import validate from "../../middleware/validate.js";
 import { authenticate } from "../../middleware/authenticate.js";
 import { authorize } from "../../middleware/authorize.js";
+import rateLimiter from "../../middleware/rateLimiter.js";
 
 const productRouter = Router();
+
+productRouter.use(rateLimiter);
 
 productRouter.post(
   "/",
   authenticate,
   authorize("merchant"),
   validate(createProductValidation),
-  createProduct
+  createProduct,
 );
 productRouter.get("/", validate(productQueryValidation, "query"), getProducts);
 productRouter.get("/:id", getProductById);
@@ -32,13 +35,13 @@ productRouter.put(
   authenticate,
   authorize("merchant"),
   validate(updateProductValidation),
-  updateProduct
+  updateProduct,
 );
 productRouter.delete(
   "/:id",
   authenticate,
   authorize("merchant"),
-  deleteProduct
+  deleteProduct,
 );
 
 export default productRouter;
