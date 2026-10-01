@@ -23,6 +23,7 @@ export const getProductsService = async (
   limit = 10,
   sort,
 ) => {
+  console.log("GET PRODUCTS SERVICE REACHED");
   const cacheKey = createProductCacheKey({
     search,
     category,
@@ -33,12 +34,18 @@ export const getProductsService = async (
     sort,
   });
 
-  const cachedProducts = await redisClient.get(cacheKey);
-  if (cachedProducts) {
-    console.log("CACHE HIT");
-    return JSON.parse(cachedProducts);
+  try {
+    const cachedProducts = await redisClient.get(cacheKey);
+
+    if (cachedProducts) {
+      console.log("CACHE HIT");
+      return JSON.parse(cachedProducts);
+    }
+
+    console.log("CACHE MISS");
+  } catch (error) {
+    console.error("Redis cache unavailable:", error.message);
   }
-  console.log("CACHE MISS");
 
   const filter = {};
 
@@ -97,9 +104,13 @@ export const getProductsService = async (
       limit,
     },
   };
-  await redisClient.set(cacheKey, JSON.stringify(result), {
-    EX: 60,
-  });
+  try {
+    await redisClient.set(cacheKey, JSON.stringify(result), {
+      EX: 60,
+    });
+  } catch (error) {
+    console.error("Redis cache unavailable:", error.message);
+  }
 
   return result;
 };
@@ -121,7 +132,11 @@ export const updateProductByIdService = async (id, merchantId, data) => {
   );
 
   if (product) {
-    await invalidateProductCache(redisClient);
+    try {
+      await invalidateProductCache(redisClient);
+    } catch (error) {
+      console.error("Redis cache invalidation failed:", error.message || error);
+    }
   }
 
   return product;
@@ -134,7 +149,11 @@ export const deleteProductByIdService = async (id, merchantId) => {
   });
 
   if (product) {
-    await invalidateProductCache(redisClient);
+    try {
+      await invalidateProductCache(redisClient);
+    } catch (error) {
+      console.error("Redis cache invalidation failed:", error.message || error);
+    }
   }
 
   return product;

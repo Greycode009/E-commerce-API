@@ -21,9 +21,13 @@ export const createProductCacheKey = ({
 };
 
 export const invalidateProductCache = async (redisClient) => {
-  const keys = await redisClient.keys("products:*");
+  try {
+    const keys = await redisClient.keys("products:*");
 
-  if (key.length > 0) {
-    await redisClient.del(keys);
+    if (keys && keys.length > 0) {
+      await redisClient.del(keys);
+    }
+  } catch (error) {
+    console.error("Redis cache invalidation skipped:", error.message || error);
   }
 };
