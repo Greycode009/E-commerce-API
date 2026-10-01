@@ -29,32 +29,55 @@ const server = http.createServer(async (req, res) => {
   let targetServer;
 
   for (let i = 0; i < servers.length; i++) {
-    const server = servers[currentServerIndex];
+    const candidateServer = servers[currentServerIndex];
 
     currentServerIndex = (currentServerIndex + 1) % servers.length;
 
-    if (await checkServerHealth(server)) {
-      targetServer = server;
+    if (await checkServerHealth(candidateServer)) {
+      targetServer = candidateServer;
       break;
     }
   }
+
   if (!targetServer) {
-    return res.status(503).json({
-      message: "No healthy servers available",
-    });
+    res.statusCode = 503;
+    res.setHeader("Content-Type", "application/json");
+
+    return res.end(
+      JSON.stringify({
+        message: "No healthy servers available",
+      })
+    );
   }
+
+  console.log(`Forwarding request to: ${targetServer}`);
 
   const proxyRequest = http.request(
     targetServer + req.url,
     {
       method: req.method,
+      headers: req.headers,
     },
     (proxyResponse) => {
+      res.writeHead(
+        proxyResponse.statusCode,
+        proxyResponse.headers
+      );
+
       proxyResponse.pipe(res);
-    },
+    }
   );
 
-  proxyRequest.end();
+  proxyRequest.on("error", (error) => {
+    console.error("Load Balancer proxy error:", error.message);
+
+    if (!res.headersSent) {
+      res.statusCode = 502;
+      res.end("Bad Gateway");
+    }
+  });
+
+  req.pipe(proxyRequest);
 });
 
 server.listen(3000, () => {
